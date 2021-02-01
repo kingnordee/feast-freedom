@@ -1,39 +1,36 @@
 package com.ask.feastfreedom.entities;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
-//@Table(name = "User123")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String fname;
     private String lname;
     private String email;
     private String password;
     private String image;
-    private String securityQ;
-    private int phone;
-    private float cart;
+    private Long phone;
 
-    public User(Long id, String fname, String lname, String email, String password, String image, String securityQ,
-                int phone, float cart) {
-        super();
-        this.id = id;
+    public User(String fname, String lname, String email, String password, String image, Long phone) {
         this.fname = fname;
         this.lname = lname;
         this.email = email;
         this.password = password;
         this.image = image;
-        this.securityQ = securityQ;
         this.phone = phone;
-        this.cart = cart;
     }
 
     public User() {
 
     }
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval=true, fetch = FetchType.LAZY)
+    private Set<Order> order;
 
     public Long getId() {
         return id;
@@ -83,28 +80,12 @@ public class User {
         this.image = image;
     }
 
-    public String getSecurityQ() {
-        return securityQ;
-    }
-
-    public void setSecurityQ(String securityQ) {
-        this.securityQ = securityQ;
-    }
-
-    public int getPhone() {
+    public Long getPhone() {
         return phone;
     }
 
-    public void setPhone(int phone) {
+    public void setPhone(Long phone) {
         this.phone = phone;
-    }
-
-    public float getCart() {
-        return cart;
-    }
-
-    public void setCart(float cart) {
-        this.cart = cart;
     }
 
 }

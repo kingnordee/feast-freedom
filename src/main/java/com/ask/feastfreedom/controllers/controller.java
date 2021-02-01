@@ -14,7 +14,7 @@ public class controller {
         return "Home (All kitchens)";
     }
 
-    @GetMapping("/kitchen/:id")
+    @GetMapping("/kitchen/{id}")
     public String kitchen(@PathVariable String id) {
         return "Kitchen: " + id;
     }

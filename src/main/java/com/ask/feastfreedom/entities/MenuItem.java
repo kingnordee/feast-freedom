@@ -18,6 +18,7 @@ public class MenuItem {
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
     Kitchen kitchen;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
     Order order;
