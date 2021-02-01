@@ -26,8 +26,13 @@ public class WorkingDays {
     String to;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "kitchen_id1", nullable = false)
     @JsonIgnore
     Kitchen kitchen;
+
+//==========================================================================
+//                    GETTERS AND SETTERS
+//==========================================================================
 
     public Long getId() {
         return id;

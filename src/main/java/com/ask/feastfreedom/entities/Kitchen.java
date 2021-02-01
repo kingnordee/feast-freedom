@@ -6,6 +6,21 @@ import java.util.Set;
 
 @Entity
 public class Kitchen {
+    public Kitchen(String name, String email, String password, String image) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.image = image;
+        this.orders = new HashSet<>();
+        this.menuItems = new HashSet<>();
+        this.working_days = new HashSet<>();
+    }
+
+    public Kitchen() {
+        this.orders = new HashSet<>();
+        this.menuItems = new HashSet<>();
+        this.working_days = new HashSet<>();
+    }
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -16,28 +31,17 @@ public class Kitchen {
     private String image;
 
     @OneToMany(mappedBy = "kitchen", cascade = CascadeType.ALL, orphanRemoval=true, fetch = FetchType.LAZY)
+    private Set<Order> orders;
+
+    @OneToMany(mappedBy = "kitchen", cascade = CascadeType.ALL, orphanRemoval=true, fetch = FetchType.LAZY)
     private Set<WorkingDays> working_days;
 
     @OneToMany(mappedBy = "kitchen", cascade = CascadeType.ALL, orphanRemoval=true, fetch = FetchType.LAZY)
     private Set<MenuItem> menuItems;
 
-    @OneToMany(mappedBy = "kitchen", cascade = CascadeType.ALL, orphanRemoval=true, fetch = FetchType.LAZY)
-    private Set<Order> orders;
-
-    public Kitchen() {
-        this.menuItems = new HashSet<>();
-        this.orders = new HashSet<>();
-    }
-
-    public Kitchen(String name, String email, String password,
-                   Set<String> working_days, String image) {
-        this.name = name;
-        this.email = email;
-        this.password = password;
-        this.working_days = new HashSet<>();
-        this.image = image;
-
-    }
+//==========================================================================
+//                    GETTERS AND SETTERS
+//==========================================================================
 
     public Long getId() {
         return id;

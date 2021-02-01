@@ -16,10 +16,12 @@ public class MenuItem {
     private String image;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "kitchen_id2", nullable = false)
     @JsonIgnore
     Kitchen kitchen;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "kitchen_id3", nullable = false)
     @JsonIgnore
     Order order;
 
@@ -35,6 +37,10 @@ public class MenuItem {
     public MenuItem() {
 
     }
+
+//==========================================================================
+//                    GETTERS AND SETTERS
+//==========================================================================
 
     public Long getId() {
         return id;

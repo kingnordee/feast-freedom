@@ -3,13 +3,24 @@ package com.ask.feastfreedom.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-import java.awt.*;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-//@Table(name = "Order123")
 public class Order {
+    public Order(Kitchen kitchen, User user, Date orderTime, float amountPaid){
+        this.kitchen = kitchen;
+        this.user = user;
+        this.orderTime = orderTime;
+        this.amountPaid = amountPaid;
+        this.menuItems = new HashSet<>();
+    }
+
+    public Order(){
+        this.menuItems = new HashSet<>();
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -18,21 +29,25 @@ public class Order {
     Set<MenuItem> menuItems;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "kitchen_id4", nullable = false)
     @JsonIgnore
     Kitchen kitchen;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "kitchen_id5", nullable = false)
     @JsonIgnore
     User user;
 
     private Date orderTime;
     private float amountPaid;
 
+//==========================================================================
+//                    GETTERS AND SETTERS
+//==========================================================================
+
     public Long getId() { return id; }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public void setId(Long id) { this.id = id; }
 
     public Set<MenuItem> getMenuItems() {
         return menuItems;

@@ -16,6 +16,9 @@ public class User {
     private String image;
     private Long phone;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval=true, fetch = FetchType.LAZY)
+    private Set<Order> order;
+
     public User(String fname, String lname, String email, String password, String image, Long phone) {
         this.fname = fname;
         this.lname = lname;
@@ -29,8 +32,9 @@ public class User {
 
     }
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval=true, fetch = FetchType.LAZY)
-    private Set<Order> order;
+//==========================================================================
+//                    GETTERS AND SETTERS
+//==========================================================================
 
     public Long getId() {
         return id;
