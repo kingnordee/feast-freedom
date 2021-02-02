@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "WorkingDaysTable")
+@Table(name = "_workingdays")
 public class WorkingDays {
     public WorkingDays(Kitchen kitchen, String _day, String _from, String _to){
         this.kitchen = kitchen;

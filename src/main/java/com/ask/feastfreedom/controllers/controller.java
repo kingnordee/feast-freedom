@@ -1,17 +1,17 @@
 package com.ask.feastfreedom.controllers;
 
-import com.ask.feastfreedom.entities.Kitchen;
-import com.ask.feastfreedom.entities.Order;
-import com.ask.feastfreedom.entities.User;
-import com.ask.feastfreedom.entities.WorkingDays;
+import com.ask.feastfreedom.entities.*;
+import com.ask.feastfreedom.entities.MenuItem;
 import com.ask.feastfreedom.repos.*;
-import com.sun.org.apache.regexp.internal.RE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*", allowCredentials = "")
@@ -28,7 +28,7 @@ public class controller {
     @Autowired
     WorkingDaysRepo workingDaysRepo;
 
-    //==========================================================================
+//==========================================================================
 //                    KITCHEN
 //==========================================================================
     @GetMapping("/")
@@ -61,7 +61,7 @@ public class controller {
         }
     }
 
-    //==========================================================================
+//==========================================================================
 //                    USER
 //==========================================================================
     @PostMapping("/user_signup")
@@ -104,10 +104,26 @@ public class controller {
 //                    ORDER
 //==========================================================================
     @PostMapping("/place_order")
-    public ResponseEntity<Order> place_order(@RequestBody Order order) {
+    public ResponseEntity<Order> place_order(@RequestBody Map<String, String> info)  {
         try {
-            Order newOrder = orderRepo.save(order);
-            return new ResponseEntity<>(newOrder, HttpStatus.CREATED);
+            Kitchen kitchen = kitchenRepo.findById(Long.parseLong(info.get("kitchenId"))).get();
+            User user = userRepo.findById(Long.parseLong(info.get("userId"))).get();
+            String[] menuItemsIds = info.get("menuItemsIds").split(",");
+
+            Set<MenuItem> menuItems = new HashSet<>();
+            float orderTotal = 0.0f;
+
+            for(String id : menuItemsIds){
+                Long numId = Long.parseLong(id);
+                MenuItem menuItem = menuItemRepo.findById(numId).get();
+                menuItems.add(menuItem);
+                orderTotal += menuItem.getPrice();
+            }
+
+            Order order = new Order(kitchen,user,new Date(),menuItems, orderTotal);
+            orderRepo.save(order);
+
+            return new ResponseEntity<>(order, HttpStatus.CREATED);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
@@ -116,5 +132,28 @@ public class controller {
 //==========================================================================
 //                    MENU ITEMS
 //==========================================================================
+    @PostMapping("/add_menu_item/{kitchenId}")
+    public ResponseEntity<MenuItem> add_menu_item(@RequestBody MenuItem menuItem, @PathVariable Long kitchenId){
+        try {
+            Kitchen kitchen = kitchenRepo.findById(kitchenId).get();
+            menuItem.setKitchen(kitchen);
+            MenuItem newMenuItem = menuItemRepo.save(menuItem);
+            return new ResponseEntity<>(newMenuItem, HttpStatus.CREATED);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/order_items/{orderId}")
+    public ResponseEntity<Set<MenuItem>> order_items(@PathVariable Long orderId){
+        try {
+            Set<MenuItem> menuItems = orderRepo.findById(orderId).get().getMenuItems();
+            return new ResponseEntity<>(menuItems, HttpStatus.FOUND);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+    }
 }
 //    git checkout -t <name of remote>/test

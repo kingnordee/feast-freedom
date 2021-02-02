@@ -8,26 +8,39 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "OrderTable")
+@Table(name = "_order")
 public class Order {//CLASS BEGINS
     public Order(Kitchen kitchen, User user, Date orderTime, float amountPaid){
         this.kitchen = kitchen;
         this.user = user;
         this.orderTime = orderTime;
         this.amountPaid = amountPaid;
-        this.menuItems = new HashSet<>();
+        this.menu_items = new HashSet<>();
+    }
+
+    public Order(Kitchen kitchen, User user, Date orderTime, Set<MenuItem>menuItems, float amountPaid){
+        this.kitchen = kitchen;
+        this.user = user;
+        this.orderTime = orderTime;
+        this.amountPaid = amountPaid;
+        this.menu_items = menuItems;
     }
 
     public Order(){
-        this.menuItems = new HashSet<>();
+        this.menu_items = new HashSet<>();
     }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval=true, fetch = FetchType.LAZY)
-    private Set<MenuItem> menuItems;
+    @ManyToMany
+    @JoinTable(
+            name = "_order_menuitem_",
+            joinColumns = @JoinColumn(name = "order_id"),
+            inverseJoinColumns = @JoinColumn(name = "item_id")
+    )
+    private Set<MenuItem> menu_items;
 
     @ManyToOne
     @JsonIgnore
@@ -49,11 +62,11 @@ public class Order {//CLASS BEGINS
     public void setId(Long id) { this.id = id; }
 
     public Set<MenuItem> getMenuItems() {
-        return menuItems;
+        return menu_items;
     }
 
-    public void setMenuItems(Set<MenuItem> menuItems) {
-        this.menuItems = menuItems;
+    public void setMenuItems(MenuItem menuItem) {
+        this.menu_items.add(menuItem);
     }
 
     public Kitchen getKitchen() {

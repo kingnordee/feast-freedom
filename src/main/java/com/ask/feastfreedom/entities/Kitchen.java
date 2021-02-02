@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "KitchenTable")
+@Table(name = "_kitchen")
 public class Kitchen {
     public Kitchen(String name, String email, String password, String image) {
         this.name = name;
