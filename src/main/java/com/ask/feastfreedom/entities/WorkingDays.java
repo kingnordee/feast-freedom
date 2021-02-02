@@ -5,12 +5,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "WorkingDaysTable")
 public class WorkingDays {
-    public WorkingDays(Kitchen kitchen, String day, String from, String to){
+    public WorkingDays(Kitchen kitchen, String _day, String _from, String _to){
         this.kitchen = kitchen;
-        this.day = day;
-        this.from = from;
-        this.to = to;
+        this._day = _day;
+        this._from = _from;
+        this._to = _to;
     }
 
     public WorkingDays(){
@@ -19,16 +20,15 @@ public class WorkingDays {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    private Long id;
 
-    String day;
-    String from;
-    String to;
+    private String _day;
+    private String _from;
+    private String _to;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "kitchen_id1", nullable = false)
+    @ManyToOne
     @JsonIgnore
-    Kitchen kitchen;
+    private Kitchen kitchen;
 
 //==========================================================================
 //                    GETTERS AND SETTERS
@@ -43,27 +43,27 @@ public class WorkingDays {
     }
 
     public String getDay() {
-        return day;
+        return _day;
     }
 
     public void setDay(String day) {
-        this.day = day;
+        this._day = day;
     }
 
     public String getFrom() {
-        return from;
+        return _from;
     }
 
     public void setFrom(String from) {
-        this.from = from;
+        this._from = from;
     }
 
     public String getTo() {
-        return to;
+        return _to;
     }
 
     public void setTo(String to) {
-        this.to = to;
+        this._to = to;
     }
 
     public Kitchen getKitchen() {
@@ -73,6 +73,5 @@ public class WorkingDays {
     public void setKitchen(Kitchen kitchen) {
         this.kitchen = kitchen;
     }
-
 }
 

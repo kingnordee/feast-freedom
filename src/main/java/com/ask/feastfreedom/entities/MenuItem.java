@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 
 @Entity
-//@Table(name = "Menu123")
+@Table(name = "MenuItemTable")
 public class MenuItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,15 +15,13 @@ public class MenuItem {
     private float price;
     private String image;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "kitchen_id2", nullable = false)
+    @ManyToOne
     @JsonIgnore
-    Kitchen kitchen;
+    private Kitchen kitchen;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "kitchen_id3", nullable = false)
+    @ManyToOne
     @JsonIgnore
-    Order order;
+    private Order order;
 
     public MenuItem(Long id, String name, boolean veg, float price, String image) {
         super();
@@ -81,5 +79,4 @@ public class MenuItem {
     public void setImage(String image) {
         this.image = image;
     }
-
 }

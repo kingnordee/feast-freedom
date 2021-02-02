@@ -8,7 +8,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-public class Order {
+@Table(name = "OrderTable")
+public class Order {//CLASS BEGINS
     public Order(Kitchen kitchen, User user, Date orderTime, float amountPaid){
         this.kitchen = kitchen;
         this.user = user;
@@ -26,17 +27,15 @@ public class Order {
     private Long id;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval=true, fetch = FetchType.LAZY)
-    Set<MenuItem> menuItems;
+    private Set<MenuItem> menuItems;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "kitchen_id4", nullable = false)
+    @ManyToOne
     @JsonIgnore
-    Kitchen kitchen;
+    private Kitchen kitchen;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "kitchen_id5", nullable = false)
+    @ManyToOne
     @JsonIgnore
-    User user;
+    private User user;
 
     private Date orderTime;
     private float amountPaid;

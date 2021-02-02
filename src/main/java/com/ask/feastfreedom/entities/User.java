@@ -4,6 +4,7 @@ import javax.persistence.*;
 import java.util.Set;
 
 @Entity
+@Table(name = "UserTable")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -91,5 +92,4 @@ public class User {
     public void setPhone(Long phone) {
         this.phone = phone;
     }
-
 }
