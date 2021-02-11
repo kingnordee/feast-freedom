@@ -3,7 +3,7 @@ package com.ask.feastfreedom.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Table(name = "_item")
@@ -21,13 +21,14 @@ public class MenuItem {
     private Kitchen kitchen;
 
     @ManyToMany(mappedBy = "menu_items")
-    private Set<Order> order;
+    private List<Order> order;
 
-    public MenuItem(String name, boolean veg, float price, String image) {
+    public MenuItem(Kitchen kitchen, String name, boolean veg, float price, String image) {
         this.name = name;
         this.veg = veg;
         this.price = price;
         this.image = image;
+        this.kitchen = kitchen;
     }
 
     public MenuItem() {

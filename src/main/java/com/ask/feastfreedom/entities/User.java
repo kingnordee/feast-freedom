@@ -92,4 +92,12 @@ public class User {
     public void setPhone(Long phone) {
         this.phone = phone;
     }
+
+    public Set<Order> getOrder() {
+        return order;
+    }
+
+    public void setOrder(Set<Order> order) {
+        this.order = order;
+    }
 }

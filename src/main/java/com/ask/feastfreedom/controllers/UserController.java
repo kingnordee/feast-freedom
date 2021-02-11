@@ -5,11 +5,16 @@ import com.ask.feastfreedom.repos.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
+import java.util.Optional;
 
+@RestController
+@CrossOrigin(origins = "*", allowedHeaders = "*", allowCredentials = "")
 public class UserController {
 
     @Autowired
@@ -24,24 +29,24 @@ public class UserController {
     WorkingDaysRepo workingDaysRepo;
 
     @PostMapping("/user_signup")
-    public ResponseEntity<User> user_signup(@RequestBody User user) {
+    public User user_signup(@RequestBody User user) {
         try {
-            User newUser = userRepo.save(user);
-            return new ResponseEntity<>(newUser, HttpStatus.CREATED);
+            return userRepo.save(user);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            return null;
         }
     }
 
     @PostMapping("/user_login")
-    public ResponseEntity<User> user_login(@RequestBody Map<String, String> info) {
+    public User user_login(@RequestBody Map<String, String> info) {
         try {
-            User user = userRepo.userLogin(info.get("email"), info.get("password"));
-            return new ResponseEntity<>(user, HttpStatus.FOUND);
+            User user =  userRepo.userLogin(info.get("email"), info.get("password"));
+            System.out.println(user);
+            return user;
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            return null;
         }
     }
 }

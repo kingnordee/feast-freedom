@@ -6,16 +6,12 @@ import com.ask.feastfreedom.entities.Order;
 import com.ask.feastfreedom.entities.User;
 import com.ask.feastfreedom.repos.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
+@RestController
+@CrossOrigin(origins = "*", allowedHeaders = "*", allowCredentials = "")
 public class OrderController {
     @Autowired
     KitchenRepo kitchenRepo;
@@ -29,13 +25,15 @@ public class OrderController {
     WorkingDaysRepo workingDaysRepo;
 
     @PostMapping("/place_order")
-    public ResponseEntity<Order> place_order(@RequestBody Map<String, String> info)  {
+    public Order place_order(@RequestBody Map<String, String> info)  {
         try {
             Kitchen kitchen = kitchenRepo.findById(Long.parseLong(info.get("kitchenId"))).get();
             User user = userRepo.findById(Long.parseLong(info.get("userId"))).get();
             String[] menuItemsIds = info.get("menuItemsIds").split(",");
+            System.out.println(Arrays.toString(menuItemsIds));
+            System.out.println(info.get("menuItemsIds"));
 
-            Set<MenuItem> menuItems = new HashSet<>();
+            List<MenuItem> menuItems = new ArrayList<>();
             float orderTotal = 0.0f;
 
             for(String id : menuItemsIds){
@@ -46,12 +44,33 @@ public class OrderController {
             }
 
             Order order = new Order(kitchen,user,new Date(),menuItems, orderTotal);
-            orderRepo.save(order);
+            return orderRepo.save(order);
 
-            return new ResponseEntity<>(order, HttpStatus.CREATED);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            return null;
         }
     }
+
+//    @GetMapping("/get_order/{userId}")
+//    public List<Order> place_order(@PathVariable Long userId)  {
+//        try {
+////            User user = userRepo.findById(userId).get();
+//            return orderRepo.findByUserId(userId);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return null;
+//        }
+//    }
+
+    @GetMapping("/get_order/{userId}")
+    public Set<Order> place_order(@PathVariable Long userId)  {
+        try {
+            return userRepo.findById(userId).get().getOrder();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 }

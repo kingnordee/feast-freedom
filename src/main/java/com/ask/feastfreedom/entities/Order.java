@@ -3,9 +3,7 @@ package com.ask.feastfreedom.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "_order")
@@ -15,10 +13,10 @@ public class Order {//CLASS BEGINS
         this.user = user;
         this.orderTime = orderTime;
         this.amountPaid = amountPaid;
-        this.menu_items = new HashSet<>();
+        this.menu_items = new ArrayList<>();
     }
 
-    public Order(Kitchen kitchen, User user, Date orderTime, Set<MenuItem>menuItems, float amountPaid){
+    public Order(Kitchen kitchen, User user, Date orderTime, List<MenuItem>menuItems, float amountPaid){
         this.kitchen = kitchen;
         this.user = user;
         this.orderTime = orderTime;
@@ -27,7 +25,7 @@ public class Order {//CLASS BEGINS
     }
 
     public Order(){
-        this.menu_items = new HashSet<>();
+        this.menu_items = new ArrayList<>();
     }
 
     @Id
@@ -40,7 +38,7 @@ public class Order {//CLASS BEGINS
             joinColumns = @JoinColumn(name = "order_id"),
             inverseJoinColumns = @JoinColumn(name = "item_id")
     )
-    private Set<MenuItem> menu_items;
+    private List<MenuItem> menu_items;
 
     @ManyToOne
     @JsonIgnore
@@ -61,7 +59,7 @@ public class Order {//CLASS BEGINS
 
     public void setId(Long id) { this.id = id; }
 
-    public Set<MenuItem> getMenuItems() {
+    public List<MenuItem> getMenuItems() {
         return menu_items;
     }
 
