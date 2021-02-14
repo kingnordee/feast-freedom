@@ -98,4 +98,14 @@ public class Order {//CLASS BEGINS
     public void setAmountPaid(float amountPaid) {
         this.amountPaid = amountPaid;
     }
+
+    public void setAmountPaid() {
+        float amountPaid = 0;
+
+        for(MenuItem menuItem : this.menu_items){
+            amountPaid += menuItem.getPrice();
+        }
+
+        this.amountPaid = amountPaid;
+    }
 }

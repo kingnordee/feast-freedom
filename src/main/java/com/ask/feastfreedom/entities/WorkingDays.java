@@ -28,6 +28,7 @@ public class WorkingDays {
 
     @ManyToOne
     @JsonIgnore
+    @JoinColumn(name = "kitchenid", nullable = false)
     private Kitchen kitchen;
 
 //==========================================================================

@@ -2,12 +2,12 @@ package com.ask.feastfreedom.controllers;
 
 import com.ask.feastfreedom.entities.*;
 import com.ask.feastfreedom.repos.*;
+import org.hibernate.jdbc.Work;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*", allowCredentials = "")
@@ -47,6 +47,33 @@ public class WorkingDaysController {
                         ));
             }
             return HttpStatus.CREATED;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return HttpStatus.EXPECTATION_FAILED;
+        }
+    }
+
+    @DeleteMapping("/delete_day/{dayId}")
+    public HttpStatus delete_day(@PathVariable Long dayId) {
+        try {
+            System.out.println("About to delete dayId: " + dayId);
+            workingDaysRepo.deleteById(dayId);
+
+            return HttpStatus.GONE;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return HttpStatus.EXPECTATION_FAILED;
+        }
+    }
+
+    @DeleteMapping("/delete_days/{kitchenId}")
+    public HttpStatus delete_days(@PathVariable Long kitchenId) {
+        try {
+
+            Kitchen kitchen = kitchenRepo.findById(kitchenId).get();
+            workingDaysRepo.deleteByKitchen(kitchen);
+
+            return HttpStatus.GONE;
         } catch (Exception e) {
             e.printStackTrace();
             return HttpStatus.EXPECTATION_FAILED;

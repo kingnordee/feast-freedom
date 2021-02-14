@@ -47,9 +47,9 @@ public class MenuItemController {
     }
 
     @GetMapping("/get_menu_items/{kitchenId}")
-    public Set<MenuItem> get_menu_items(@PathVariable Long kitchenId){
+    public Kitchen get_menu_items(@PathVariable Long kitchenId){
         try {
-            return kitchenRepo.findById(kitchenId).get().getMenuItems();
+            return kitchenRepo.findById(kitchenId).get();
         } catch (Exception e) {
             e.printStackTrace();
             return null;
